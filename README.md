@@ -2,6 +2,40 @@
 
 A command-line-based tool to calculate spatial information (SI) and temporal information (TI) according to ITU-T P.910.
 
+## Requirements
+
+- Python 3
+- numpy
+- scipy
+- av (`pip3 install av`)
+- tqdm (`pip3 install tqdm`)
+
+## Installation
+
+Clone this repository and then:
+
+    pip3 install . /path/to/input.mp4
+
+Alternatively, run:
+
+    python3 -m siti /path/to/input.mp4
+
+## Usage
+
+    usage: __main__.py [-h] [-o OUTPUT] [-q] [-n NUM_FRAMES] [-m] input
+
+    positional arguments:
+      input                 input file
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      -o OUTPUT, --output OUTPUT
+                            output JSON file
+      -q, --quiet           do not show progress bar
+      -n NUM_FRAMES, --num-frames NUM_FRAMES
+                            number of frames to calculate
+      -m, --magnitude       use magnitude-based way to calculate SI
+
 ## Background
 
 The following info is given about SI / TI in ITU-T Recommendation P.910 ("Subjective video quality assessment methods for multimedia applications"):
