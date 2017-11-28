@@ -110,9 +110,9 @@ def calculate_si_ti(input_file, quiet=False, num_frames=0, magnitude=False):
     # initialize progress
     if not num_frames:
         num_frames = container.streams.video[0].frames
-    t = tqdm(total=num_frames, disable=quiet)
+    t = tqdm(total=num_frames, disable=quiet, file=sys.stderr)
 
-    frame_index = 0
+    current_frame = 0
     for packet in container.demux():
         for frame in packet.decode():
             if isinstance(frame, av.video.frame.VideoFrame):
@@ -127,13 +127,13 @@ def calculate_si_ti(input_file, quiet=False, num_frames=0, magnitude=False):
 
                 previous_frame_data = frame_data
 
-                frame_index += 1
+                current_frame += 1
                 t.update()
-                if frame_index >= num_frames:
-                    return si_values, ti_values, frame_index
+                if current_frame >= num_frames:
+                    return si_values, ti_values, current_frame
 
     t.close()
-    return si_values, ti_values, frame_index
+    return si_values, ti_values, current_frame
 
 
 def main():
@@ -144,7 +144,14 @@ def main():
     )
     parser.add_argument(
         "-o", "--output",
-        help="output JSON file"
+        help="output file"
+    )
+    parser.add_argument(
+        "-f", "--format",
+        type=str,
+        choices=["json", "csv"],
+        default="json",
+        help="output format"
     )
     parser.add_argument(
         "-q", "--quiet",
@@ -174,26 +181,33 @@ def main():
         magnitude=cli_args.magnitude
     )
 
-    data = {
-        "filename": os.path.abspath(cli_args.input),
-        "SI": si,
-        "TI": ti,
-        "avgSI": np.mean(si),
-        "avgTI": np.mean(ti),
-        "maxSI": np.max(si),
-        "minSI": np.min(si),
-        "maxTI": np.max(ti),
-        "minTI": np.min(ti),
-        "stdSI": np.std(si),
-        "stdTI": np.std(ti),
-        "numFrames": num_frames,
-    }
+    if cli_args.format == "json":
+        data = {
+            "filename": os.path.abspath(cli_args.input),
+            "SI": si,
+            "TI": ti,
+            "avgSI": np.mean(si),
+            "avgTI": np.mean(ti),
+            "maxSI": np.max(si),
+            "minSI": np.min(si),
+            "maxTI": np.max(ti),
+            "minTI": np.min(ti),
+            "stdSI": np.std(si),
+            "stdTI": np.std(ti),
+            "numFrames": num_frames,
+        }
+        data_dump = json.dumps(data, indent=True, sort_keys=True)
+    elif cli_args.format == "csv":
+        headers = "si,ti"
+        ti.insert(0, 0.0)
+        lines = [",".join([str(t) for t in tup]) for tup in zip(si, ti)]
+        data_dump = "\n".join([headers] + lines)
 
     if cli_args.output:
         with open(cli_args.output, "w") as of:
-            json.dump(data, of, indent=True, sort_keys=True)
+            of.write(data_dump)
     else:
-        print(json.dumps(data, indent=True, sort_keys=True))
+        print(data_dump)
 
 
 if __name__ == '__main__':
