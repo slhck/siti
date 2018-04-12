@@ -40,7 +40,9 @@ def test_num_ti_frames(ti):
 
 def main():
     si, ti, num_frames = siti.calculate_si_ti(input_file, quiet=True)
-    import pdb; pdb.set_trace()
+    print(si)
+    print(ti)
+    print(num_frames)
 
 if __name__ == '__main__':
     main()

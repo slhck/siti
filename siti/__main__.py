@@ -37,12 +37,36 @@ import av
 import json
 import numpy as np
 import os
-from scipy import ndimage
+from scipy import ndimage, signal
 import sys
 from tqdm import tqdm
 
+from .__init__ import __version__ as version
 
-def calculate_si(frame_data, magnitude=False):
+np.set_printoptions(threshold=np.nan)
+
+
+def sobel_filter(im):
+    """
+    Another variant of the sobel filter:
+    https://fengl.org/2014/08/27/a-simple-implementation-of-sobel-filtering-in-python/
+    """
+
+    im = im.astype(np.float)
+    width, height = im.shape
+
+    kh = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]], dtype=np.float)
+    kv = np.array([[1, 2, 1], [0, 0, 0], [-1, -2, -1]], dtype=np.float)
+
+    gx = signal.convolve2d(im, kh, mode='same', boundary='symm', fillvalue=0)
+    gy = signal.convolve2d(im, kv, mode='same', boundary='symm', fillvalue=0)
+
+    g = np.sqrt(gx * gx + gy * gy)
+    g *= 255.0 / np.max(g)
+    return g
+
+
+def calculate_si(frame_data, magnitude=True):
     """
     Calculate SI of a frame.
 
@@ -55,16 +79,17 @@ def calculate_si(frame_data, magnitude=False):
     Returns:
         - {float}
     """
-    if not magnitude:
-        # P.910 description:
-        si = ndimage.sobel(frame_data).std()
-    else:
+    if magnitude:
         # Other implementation based on magnitude:
         dx = ndimage.sobel(frame_data, 1)  # horizontal derivative
         dy = ndimage.sobel(frame_data, 0)  # vertical derivative
-        mag = np.hypot(dx, dy)  # magnitude
-        mag = np.array(mag, dtype=np.uint8)
+        mag = np.array(np.hypot(dx, dy), dtype=np.float)  # magnitude
+        # normalization of values:
+        # mag *= 255.0 / np.max(mag)
         si = mag.std()
+    else:
+        # P.910 description:
+        si = ndimage.sobel(frame_data).std()
     return si
 
 
@@ -85,7 +110,7 @@ def calculate_ti(frame_data, previous_frame_data):
         return (frame_data - previous_frame_data).std()
 
 
-def calculate_si_ti(input_file, quiet=False, num_frames=0, magnitude=False):
+def calculate_si_ti(input_file, quiet=False, num_frames=0, magnitude=True):
     """
     Calculate SI and TI from an input file
 
@@ -95,7 +120,7 @@ def calculate_si_ti(input_file, quiet=False, num_frames=0, magnitude=False):
     Keyword Arguments:
         quiet {bool} -- do not output tqdm progress bar (default: {False})
         num_frames {int} -- number of frames to parse (default: {0})
-        magnitude {bool} -- use alternative calculation for SI magnitude (default: {False})
+        magnitude {bool} -- use alternative calculation for SI magnitude (default: {True})
 
     Returns:
         - [si_values], [ti_values], frame count
@@ -137,7 +162,7 @@ def calculate_si_ti(input_file, quiet=False, num_frames=0, magnitude=False):
 
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(prog="siti", description="siti v{}".format(version))
     parser.add_argument(
         "input",
         help="input file"
@@ -164,8 +189,8 @@ def main():
         type=int
     )
     parser.add_argument(
-        "-m", "--magnitude",
-        help="use magnitude-based way to calculate SI",
+        "-m", "--disable-magnitude",
+        help="disable magnitude-based way to calculate SI",
         action="store_true"
     )
     cli_args = parser.parse_args()
@@ -178,7 +203,7 @@ def main():
         cli_args.input,
         quiet=cli_args.quiet,
         num_frames=cli_args.num_frames,
-        magnitude=cli_args.magnitude
+        magnitude=not cli_args.disable_magnitude
     )
 
     if cli_args.format == "json":
