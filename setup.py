@@ -7,6 +7,10 @@ from os import path
 
 here = path.abspath(path.dirname(__file__))
 
+# read version string
+with open(path.join(here, 'siti', '__init__.py')) as version_file:
+    version = eval(version_file.read().split("=")[1].strip())
+
 # Get the long description from the README file
 with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
@@ -22,11 +26,9 @@ try:
 except ImportError:
     print("pypandoc module not found, could not convert Markdown to RST")
 
-import siti
-
 setup(
     name='siti',
-    version=siti.__version__,
+    version=version,
     description="Calculate Spatial Information / Temporal Information according to ITU-T P.910",
     long_description=long_description + '\n\n' + history,
     author="Werner Robitza",

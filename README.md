@@ -2,19 +2,33 @@
 
 A command-line-based tool to calculate spatial information (SI) and temporal information (TI) according to ITU-T P.910.
 
+The command outputs SI and TI information to stdout, in JSON format. If the `-o` option is given, output will be redirected to a file instead.
+
+**Note:** As there are no test vectors for SI / TI implementations, and filter calculations differ depending on how you implement them, the values obtained with this tool may not be comparable with output from other tools.
+
 ## Requirements
 
-- Python 3
-- numpy
-- scipy
-- av (`pip3 install av`)
-- tqdm (`pip3 install tqdm`)
+- Python 3 with
+  - numpy
+  - scipy
+  - av
+  - tqdm
+- FFmpeg libraries
+
+You can install these with:
+
+    pip3 install --user av tqdm scipy numpy
+
+And (under Ubuntu):
+
+    sudo apt install libavformat-dev libavcodec-dev libavdevice-dev libavutil-dev libavfilter-dev libswscale-dev libavresample-dev
 
 ## Installation
 
 Clone this repository and then:
 
-    pip3 install . /path/to/input.mp4
+    pip3 install --user .
+    siti /path/to/input.mp4
 
 Alternatively, run:
 
@@ -22,7 +36,7 @@ Alternatively, run:
 
 ## Usage
 
-    usage: __main__.py [-h] [-o OUTPUT] [-q] [-n NUM_FRAMES] [-m] input
+    usage: siti [-h] [-o OUTPUT] [-q] [-n NUM_FRAMES] [-m] input
 
     positional arguments:
       input                 input file
@@ -59,7 +73,7 @@ The measure of temporal information (TI) is computed as the maximum over time (m
 
 ## License
 
-siti, Copyright (c) 2017 Werner Robitza
+siti, Copyright (c) 2017, 2018 Werner Robitza
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
