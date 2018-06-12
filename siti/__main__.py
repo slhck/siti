@@ -12,7 +12,7 @@
 #
 # Outputs SI/TI statistics as JSON to stderr or to a file.
 #
-# siti, Copyright (c) 2017 Werner Robitza
+# siti, Copyright (c) 2017-2018 Werner Robitza
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -132,9 +132,16 @@ def calculate_si_ti(input_file, quiet=False, num_frames=0, magnitude=True):
 
     previous_frame_data = None
 
+    # get video
+    if not len(container.streams.video):
+        raise RuntimeError("No video streams found!")
+
     # initialize progress
     if not num_frames:
         num_frames = container.streams.video[0].frames
+        if num_frames == 0:
+            num_frames = None
+            print("Warning: frame count could not be detected from stream", file=sys.stderr)
     t = tqdm(total=num_frames, disable=quiet, file=sys.stderr)
 
     current_frame = 0
@@ -154,7 +161,7 @@ def calculate_si_ti(input_file, quiet=False, num_frames=0, magnitude=True):
 
                 current_frame += 1
                 t.update()
-                if current_frame >= num_frames:
+                if num_frames is not None and current_frame >= num_frames:
                     return si_values, ti_values, current_frame
 
     t.close()
