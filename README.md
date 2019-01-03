@@ -67,7 +67,7 @@ The following info is given about SI / TI in ITU-T Recommendation P.910 ("Subjec
 > here Fn(i, j) is the pixel at the ith row and jth column of nth frame in time.
 The measure of temporal information (TI) is computed as the maximum over time (maxtime) of the standard deviation over space (stdspace) of Mn(i, j) over all i and j.
 
-> ![](http://i.imgur.com/zRXcVJO.png)
+> <img src="https://i.imgur.com/XAnKWJw.png" height="19">
 
 > More motion in adjacent frames will result in higher values of TI
 
