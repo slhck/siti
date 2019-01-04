@@ -1,5 +1,9 @@
 # History
 
+# v0.4 (2019-01-04)
+
+- Fix README
+
 # v0.3 (2018-06-12)
 
 - Fix error with containers that declare no frame numbers
