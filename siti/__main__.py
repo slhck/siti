@@ -43,7 +43,7 @@ from tqdm import tqdm
 
 from .__init__ import __version__ as version
 
-np.set_printoptions(threshold=np.nan)
+np.set_printoptions(threshold=sys.maxsize)
 
 
 def sobel_filter(im):
