@@ -1,5 +1,9 @@
 # History
 
+# v0.5 (2019-04-10)
+
+- Fix error when invoking np print settings
+
 # v0.4 (2019-01-04)
 
 - Fix README
