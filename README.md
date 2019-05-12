@@ -6,51 +6,68 @@ A command-line-based tool to calculate spatial information (SI) and temporal inf
 
 The command outputs SI and TI information to stdout, in JSON format. If the `-o` option is given, output will be redirected to a file instead.
 
-**Note:** As there are no test vectors for SI / TI implementations, and filter calculations differ depending on how you implement them, the values obtained with this tool may not be comparable with output from other tools.
+Author: Werner Robitza
+
+**Important Note / Breaking Changes:**
+
+* Version 0.x produces incorrect values due to wrong reading of the data using PyAV. Version 1.x and above produces correct values in the sense of corresponding to [this implementation](https://github.com/Telecommunication-Telemedia-Assessment/SITI/). As there are no test vectors for SI / TI implementations, and filter calculations differ depending on how you implement them, the values obtained with this tool may not be comparable with output from other tools.
+* Version 1.x now outputs the same number of values for SI and TI, inserting a null value for the first frame's TI. Also, the output format has been changed.
+
+Contents:
+
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Background](#background)
+- [License](#license)
 
 ## Requirements
 
 - Python 3 with
   - numpy
   - scipy
-  - av
+  - pyav
   - tqdm
 - FFmpeg libraries
 
 You can install these with:
 
-    pip3 install --user av tqdm scipy numpy
+    pip3 install --user -r requirements.txt
 
-And (under Ubuntu):
+And (under Ubuntu) to get ffmpeg libraries:
 
     sudo apt install libavformat-dev libavcodec-dev libavdevice-dev libavutil-dev libavfilter-dev libswscale-dev libavresample-dev
 
 ## Installation
 
-Clone this repository and then:
+Run:
+
+    pip3 install --user siti
+
+Alternatively, clone this repository and then:
 
     pip3 install --user .
-    siti /path/to/input.mp4
-
-Alternatively, run:
-
-    python3 -m siti /path/to/input.mp4
 
 ## Usage
 
-    usage: siti [-h] [-o OUTPUT] [-q] [-n NUM_FRAMES] [-m] input
+```
+usage: siti [-h] [-o OUTPUT] [-f {json,csv}] [-q] [-n NUM_FRAMES] input
 
-    positional arguments:
-      input                 input file
+siti v1.0.0
 
-    optional arguments:
-      -h, --help            show this help message and exit
-      -o OUTPUT, --output OUTPUT
-                            output JSON file
-      -q, --quiet           do not show progress bar
-      -n NUM_FRAMES, --num-frames NUM_FRAMES
-                            number of frames to calculate
-      -m, --magnitude       use magnitude-based way to calculate SI
+positional arguments:
+  input                 input file
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -o OUTPUT, --output OUTPUT
+                        output file
+  -f {json,csv}, --format {json,csv}
+                        output format
+  -q, --quiet           do not show progress bar
+  -n NUM_FRAMES, --num-frames NUM_FRAMES
+                        number of frames to calculate
+```
 
 ## Background
 
@@ -77,7 +94,7 @@ The measure of temporal information (TI) is computed as the maximum over time (m
 
 ## License
 
-siti, Copyright (c) 2017, 2018 Werner Robitza
+siti, Copyright (c) 2017-2019 Werner Robitza
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
