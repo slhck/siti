@@ -1,5 +1,9 @@
 # History
 
+# v1.0 (2019-05-12)
+
+- Fix calculation and reading of values, this now produces the same values as https://github.com/Telecommunication-Telemedia-Assessment/SITI
+
 # v0.5 (2019-04-10)
 
 - Fix error when invoking np print settings
