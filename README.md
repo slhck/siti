@@ -51,18 +51,14 @@ Alternatively, clone this repository and then:
 ## Usage
 
 ```
-usage: siti [-h] [-o OUTPUT] [-f {json,csv}] [-q] [-n NUM_FRAMES] input
-
-siti v1.0.0
+usage: siti [-h] [-of {json,csv}] [-q] [-n NUM_FRAMES] input
 
 positional arguments:
   input                 input file
 
 optional arguments:
   -h, --help            show this help message and exit
-  -o OUTPUT, --output OUTPUT
-                        output file
-  -f {json,csv}, --format {json,csv}
+  -of {json,csv}, --output-format {json,csv}
                         output format
   -q, --quiet           do not show progress bar
   -n NUM_FRAMES, --num-frames NUM_FRAMES
