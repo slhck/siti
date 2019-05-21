@@ -23,18 +23,10 @@ Contents:
 
 ## Requirements
 
-- Python 3 with
-  - numpy
-  - scipy
-  - pyav
-  - tqdm
-- FFmpeg libraries
+- Python 3
+- FFmpeg libraries (to run `pyav`)
 
-You can install these with:
-
-    pip3 install --user -r requirements.txt
-
-And (under Ubuntu) to get ffmpeg libraries:
+Under Ubuntu, to get ffmpeg libraries:
 
     sudo apt install libavformat-dev libavcodec-dev libavdevice-dev libavutil-dev libavfilter-dev libswscale-dev libavresample-dev
 
