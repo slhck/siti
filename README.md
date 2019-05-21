@@ -4,7 +4,7 @@
 
 A command-line-based tool to calculate spatial information (SI) and temporal information (TI) according to ITU-T P.910.
 
-The command outputs SI and TI information to stdout, in JSON format. If the `-o` option is given, output will be redirected to a file instead.
+The command outputs SI and TI information to stdout, in JSON format, or alternatively as CSV.
 
 Author: Werner Robitza
 
