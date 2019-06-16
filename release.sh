@@ -56,9 +56,18 @@ git add "$VERSION_FILE"
 git commit -m "Bump version to ${INPUT_STRING}."
 git tag -a -m "Tag version ${INPUT_STRING}." "v$INPUT_STRING"
 
+# generate the changelog
+auto-changelog
+
+# add the changelog and amend it to the previous commit and tag
+git add CHANGELOG.md
+git commit --amend --no-edit
+git tag -a -f -m "Tag version ${INPUT_STRING}." "v$INPUT_STRING"
+
 # push to remote
 echo -e "$PUSHING_MSG"
 git push && git push --tags
 
 # upload to PyPi
-python3 setup.py sdist upload
+python3 setup.py sdist bdist_wheel
+python3 -m twine upload dist/*
