@@ -5,8 +5,20 @@
 # Based on:
 # - https://gist.github.com/pete-otaqui/4188238
 # - https://gist.github.com/mareksuscak/1f206fbc3bb9d97dec9c
+#
+# Requirements:
+# - `npm i -g auto-changelog`
+# - `pip3 install wheel twine`
 
+# define the file containing the version here
+VERSION_FILE="siti/__init__.py"
+
+# run checks
 command -v auto-changelog >/dev/null 2>&1 || { echo >&2 "auto-changelog is not installed. Install via npm!"; exit 1; }
+python -c "import pypandoc" || { echo >&2 "pypandoc is not installed. Install via pip!"; exit 1; }
+python -c "import twine" || { echo >&2 "twine is not installed. Install via pip!"; exit 1; }
+python -c "import wheel" || { echo >&2 "wheel is not installed. Install via pip!"; exit 1; }
+[[ -z $(git status -s) ]] || { echo >&2 "repo is not clean, commit everything first!"; exit 1; }
 
 set -e
 
@@ -27,8 +39,6 @@ WARNING_FLAG="${YELLOW}!"
 NOTICE_FLAG="${CYAN}❯"
 
 PUSHING_MSG="${NOTICE_FLAG} Pushing new version to the ${WHITE}origin${CYAN}..."
-
-VERSION_FILE="siti/__init__.py"
 
 BASE_STRING=$(grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' "$VERSION_FILE")
 BASE_LIST=(`echo $BASE_STRING | tr '.' ' '`)
@@ -69,5 +79,6 @@ echo -e "$PUSHING_MSG"
 git push && git push --tags
 
 # upload to PyPi
+rm -rf dist/* build
 python3 setup.py sdist bdist_wheel
 python3 -m twine upload dist/*
