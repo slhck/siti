@@ -60,11 +60,11 @@ def ti_gt():
 def test_avg_si(si, si_gt):
     print(np.mean(si))
     print(np.mean(si_gt))
-    assert round(np.mean(si), 2) == round(np.mean(si_gt), 2)
+    assert pytest.approx(np.mean(si), 0.01) == pytest.approx(np.mean(si_gt), 0.01)
 
 
 def test_avg_ti(ti, ti_gt):
-    assert round(np.mean(ti), 2) == round(np.mean(ti_gt), 2)
+    assert pytest.approx(np.mean(ti), 0.01) == pytest.approx(np.mean(ti_gt), 0.01)
 
 
 def main():
