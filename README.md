@@ -30,6 +30,10 @@ Under Ubuntu, to get ffmpeg libraries:
 
     sudo apt install libavformat-dev libavcodec-dev libavdevice-dev libavutil-dev libavfilter-dev libswscale-dev libavresample-dev
 
+Under macOS, it is recommended to install ffmpeg via [Homebrew](https://brew.sh):
+
+    brew install ffmpeg
+
 ## Installation
 
 Run:
