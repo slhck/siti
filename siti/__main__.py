@@ -13,7 +13,6 @@
 # Outputs SI/TI statistics as JSON to stderr or to a file.
 
 import argparse
-import pdb
 import av
 import json
 import numpy as np
