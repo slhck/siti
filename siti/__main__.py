@@ -61,7 +61,7 @@ def calculate_ti(frame_data, previous_frame_data):
         return (frame_data - previous_frame_data).std()
 
 
-def read_yuv(input_file: str, width: int, height: int):
+def read_yuv(input_file: str, width: int, height: int, full_range=False):
     """
     Read a YUV file and yield the per-frame Y data
     """
@@ -78,17 +78,22 @@ def read_yuv(input_file: str, width: int, height: int):
                 .reshape((height, width))
                 .astype("float32")
             )
-            u_data = (
-                np.frombuffer(in_f.read(((width // 2) * (height // 2))), dtype=np.uint8)
-                .reshape((height // 2, width // 2))
-                .astype("float32")
-            )
-            v_data = (
-                np.frombuffer(in_f.read(((width // 2) * (height // 2))), dtype=np.uint8)
-                .reshape((height // 2, width // 2))
-                .astype("float32")
-            )
-            # FIXME: is that correct? or do we need a translation function
+            # read U and V components but skip
+            in_f.read((width // 2) * (height // 2) * 2)
+            # in case we need the data later
+            # u_data = (
+            #     np.frombuffer(in_f.read(((width // 2) * (height // 2))), dtype=np.uint8)
+            #     .reshape((height // 2, width // 2))
+            #     .astype("float32")
+            # )
+            # v_data = (
+            #     np.frombuffer(in_f.read(((width // 2) * (height // 2))), dtype=np.uint8)
+            #     .reshape((height // 2, width // 2))
+            #     .astype("float32")
+            # )
+            if not full_range:
+                # convert to grey by assumng limited range input
+                y_data = np.around((y_data - 16)/((235-16)/255))
             yield y_data
 
 
@@ -130,7 +135,9 @@ def get_num_frames(input_file: str, width=None, height=None):
     return num_frames
 
 
-def calculate_si_ti(input_file: str, quiet=False, num_frames=0, width=0, height=0):
+def calculate_si_ti(
+    input_file: str, quiet=False, num_frames=0, width=0, height=0, full_range=False
+):
     """
     Calculate SI and TI from an input file
 
@@ -142,6 +149,7 @@ def calculate_si_ti(input_file: str, quiet=False, num_frames=0, width=0, height=
         num_frames {int} -- number of frames to parse (default: {0})
         width {int} -- frame width for YUV files (default: None)
         height {int} -- frame height for YUV files (default: None)
+        full_range {bool} –- assume full range for YUV files (default: False)
 
     Returns:
         - [si_values], [ti_values], frame count
@@ -155,13 +163,13 @@ def calculate_si_ti(input_file: str, quiet=False, num_frames=0, width=0, height=
             "Warning: Reading YUV files may produce values different from what you would get if you analyzed a muxed (e.g. MP4) file.. See https://github.com/slhck/siti/issues/4 for more info.",
             file=sys.stderr,
         )
-        kwargs = {"width": width, "height": height}
+        kwargs = {"width": width, "height": height, "full_range": full_range}
         iterator_fun = read_yuv
     else:
         kwargs = {}
         iterator_fun = read_file
 
-    num_frames = get_num_frames(input_file, **kwargs)
+    num_frames = get_num_frames(input_file, width=width, height=height)
 
     t = tqdm(total=num_frames, disable=quiet, file=sys.stderr)
 
@@ -206,6 +214,12 @@ def main():
     )
     parser.add_argument("--width", help="frame width (for YUV files)", type=int)
     parser.add_argument("--height", help="frame height (for YUV files)", type=int)
+    parser.add_argument(
+        "-f",
+        "--full-range",
+        help="assume full range for YUV input",
+        action="store_true",
+    )
     cli_args = parser.parse_args()
 
     if (cli_args.num_frames is not None) and cli_args.num_frames < 2:
@@ -222,6 +236,7 @@ def main():
         num_frames=cli_args.num_frames,
         width=cli_args.width,
         height=cli_args.height,
+        full_range=cli_args.full_range,
     )
 
     si = np.round(np.array(si_orig).astype(float), 3).tolist()

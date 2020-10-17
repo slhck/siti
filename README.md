@@ -10,7 +10,6 @@ Author: Werner Robitza
 
 **Important Note / Breaking Changes:**
 
-* Version 1.1.0 adds support for YUV files, but the values are not compatible with multiplexed files. See [this issue](https://github.com/slhck/siti/issues/4) for more info.
 * Version 0.x produces incorrect values due to wrong reading of the data using PyAV. Version 1.x and above produces correct values in the sense of corresponding to [this implementation](https://github.com/Telecommunication-Telemedia-Assessment/SITI/). As there are no test vectors for SI / TI implementations, and filter calculations differ depending on how you implement them, the values obtained with this tool may not be comparable with output from other tools.
 * Version 1.x now outputs the same number of values for SI and TI, inserting a null value for the first frame's TI. Also, the output format has been changed.
 
@@ -62,6 +61,7 @@ optional arguments:
                         number of frames to calculate
   --width WIDTH         frame width (for YUV files)
   --height HEIGHT       frame height (for YUV files)
+  -f, --full-range      assume full range for YUV input
 ```
 
 ## Background

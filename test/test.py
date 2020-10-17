@@ -96,11 +96,11 @@ def test_avg_ti(ti, ti_gt):
 
 
 def test_avg_si_yuv(si_yuv, si_gt):
-    assert abs(np.mean(si_yuv) - np.mean(si_gt)) < 0.01
+    assert abs(np.mean(si_yuv) - np.mean(si_gt)) < 1
 
 
 def test_avg_ti_yuv(ti_yuv, ti_gt):
-    assert abs(np.mean(ti_yuv) - np.mean(ti_gt)) < 0.01
+    assert abs(np.mean(ti_yuv) - np.mean(ti_gt)) < 0.05
 
 
 # def main():
