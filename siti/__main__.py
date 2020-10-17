@@ -31,9 +31,6 @@ def calculate_si(frame_data):
     Arguments:
         - frame_data {ndarray}
 
-    Keyword Arguments:
-        - magnitude {bool} -- whether to use the magnitude-based calculation
-
     Returns:
         - {float}
     """
