@@ -36,7 +36,7 @@ def calculate_si(frame_data):
     """
     sob_x = ndimage.sobel(frame_data, axis=0)
     sob_y = ndimage.sobel(frame_data, axis=1)
-    si = np.hypot(sob_x, sob_y).std()
+    si = np.hypot(sob_x, sob_y)[1:-1, 1:-1].std()
     return si
 
 
