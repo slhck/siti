@@ -7,8 +7,7 @@
 # - https://gist.github.com/mareksuscak/1f206fbc3bb9d97dec9c
 #
 # Requirements:
-# - `npm i -g auto-changelog`
-# - `pip3 install wheel twine`
+# - `pip3 install wheel twine gitchangelog pystache`
 
 # define the file containing the version here
 VERSION_FILE="siti/__init__.py"
