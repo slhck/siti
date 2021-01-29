@@ -14,10 +14,10 @@
 VERSION_FILE="siti/__init__.py"
 
 # run checks
-command -v auto-changelog >/dev/null 2>&1 || { echo >&2 "auto-changelog is not installed. Install via npm!"; exit 1; }
-python -c "import pypandoc" || { echo >&2 "pypandoc is not installed. Install via pip!"; exit 1; }
-python -c "import twine" || { echo >&2 "twine is not installed. Install via pip!"; exit 1; }
-python -c "import wheel" || { echo >&2 "wheel is not installed. Install via pip!"; exit 1; }
+for package in pypandoc twine wheel gitchangelog pystache; do
+    python -c "import ${package}" || { echo >&2 "${package} is not installed. Install via pip!"; exit 1; }
+done
+
 [[ -z $(git status -s) ]] || { echo >&2 "repo is not clean, commit everything first!"; exit 1; }
 
 set -e
@@ -67,7 +67,7 @@ git commit -m "Bump version to ${INPUT_STRING}."
 git tag -a -m "Tag version ${INPUT_STRING}." "v$INPUT_STRING"
 
 # generate the changelog
-auto-changelog
+gitchangelog > CHANGELOG.md
 
 # add the changelog and amend it to the previous commit and tag
 git add CHANGELOG.md
