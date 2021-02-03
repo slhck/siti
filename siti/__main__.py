@@ -165,7 +165,9 @@ def calculate_si_ti(
         kwargs = {}
         iterator_fun = read_file
 
-    num_frames = get_num_frames(input_file, width=width, height=height)
+    # if the user didn't specify a maximum, get it from the container
+    if num_frames == 0:
+        num_frames = get_num_frames(input_file, width=width, height=height)
 
     t = tqdm(total=num_frames, disable=quiet, file=sys.stderr)
 
@@ -206,7 +208,7 @@ def main():
         "-q", "--quiet", help="do not show progress bar", action="store_true"
     )
     parser.add_argument(
-        "-n", "--num-frames", help="number of frames to calculate", type=int
+        "-n", "--num-frames", help="number of frames to calculate, must be >= 2", type=int
     )
     parser.add_argument("--width", help="frame width (for YUV files)", type=int)
     parser.add_argument("--height", help="frame height (for YUV files)", type=int)
