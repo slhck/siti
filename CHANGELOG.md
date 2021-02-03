@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v1.3.1 (2021-02-03)
+
+* Fix behavior of -n option.
+
+* Fix comment in release script.
+
+
 ## v1.3.0 (2021-01-29)
 
 * Note breaking changes.
@@ -68,11 +75,6 @@
 * Update README.
 
   fix info about output format
-
-
-## v1.0.3 (2019-06-16)
-
-* Update release script.
 
 
 ## v1.0.2 (2019-05-18)
