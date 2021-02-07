@@ -1,5 +1,5 @@
 include CHANGELOG.md
 include README.md
-include LICENSE
+include LICENSE.md
 include setup.cfg
 include test/*
