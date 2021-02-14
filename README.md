@@ -1,6 +1,6 @@
 # SITI: Spatial Information / Temporal Information
 
-[![PyPI version](https://badge.fury.io/py/siti.svg)](https://badge.fury.io/py/siti)
+[![PyPI version](https://img.shields.io/pypi/v/siti.svg)](https://img.shields.io/pypi/v/siti)
 
 A command-line-based tool to calculate spatial information (SI) and temporal information (TI) according to ITU-T P.910.
 
