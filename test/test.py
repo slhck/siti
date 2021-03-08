@@ -3,13 +3,12 @@
 import sys
 import os
 import subprocess
+import numpy as np
+import pytest
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-import siti.__main__ as siti
-
-import numpy as np
-import pytest
+import siti.__main__ as siti  # noqa E402
 
 input_file = os.path.abspath(os.path.join(os.path.dirname(__file__), "test.mp4"))
 
