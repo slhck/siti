@@ -1,6 +1,25 @@
 # Changelog
 
 
+## v1.4.0 (2021-03-08)
+
+* Exclude first 0 TI value from global stats.
+
+* Bump requirements for Python, add link to README.
+
+* Switch to siti_tools library.
+
+* Add vscode to gitignore.
+
+* Remove release script.
+
+* Format setup.py and switch to markdown.
+
+* Update badge URL.
+
+* Fix manifest file.
+
+
 ## v1.3.1 (2021-02-03)
 
 * Fix behavior of -n option.
@@ -75,6 +94,11 @@
 * Update README.
 
   fix info about output format
+
+
+## v1.0.3 (2019-06-16)
+
+* Update release script.
 
 
 ## v1.0.2 (2019-05-18)
