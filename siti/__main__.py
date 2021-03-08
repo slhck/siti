@@ -17,98 +17,12 @@ import av
 import json
 import numpy as np
 import os
-from scipy import ndimage
 import sys
 from tqdm import tqdm
+from siti_tools.file import read_container, read_yuv, FileFormat
+from siti_tools.siti import si, ti
 
 from .__init__ import __version__ as version
-
-
-def calculate_si(frame_data):
-    """
-    Calculate SI of a frame.
-
-    Arguments:
-        - frame_data {ndarray}
-
-    Returns:
-        - {float}
-    """
-    sob_x = ndimage.sobel(frame_data, axis=0)
-    sob_y = ndimage.sobel(frame_data, axis=1)
-    si = np.hypot(sob_x, sob_y)[1:-1, 1:-1].std()
-    return si
-
-
-def calculate_ti(frame_data, previous_frame_data):
-    """
-    Calculate TI between two frames.
-
-    Arguments:
-        frame_data {ndarray} -- current frame
-        previous_frame_data {ndarray} -- previous frame, must be of same size as current frame
-
-    Returns:
-        - {float}
-    """
-    if previous_frame_data is None:
-        return None
-    else:
-        return (frame_data - previous_frame_data).std()
-
-
-def read_yuv(input_file: str, width: int, height: int, full_range=False):
-    """
-    Read a YUV file and yield the per-frame Y data
-    """
-    # get the number of frames again
-    num_frames = get_num_frames(input_file, width=width, height=height)
-
-    if num_frames is None:
-        raise RuntimeError("Could not determine number of frames!")
-
-    with open(input_file, "rb") as in_f:
-        for _ in range(num_frames):
-            y_data = (
-                np.frombuffer(in_f.read((width * height)), dtype=np.uint8)
-                .reshape((height, width))
-                .astype("float32")
-            )
-            # read U and V components but skip
-            in_f.read((width // 2) * (height // 2) * 2)
-            # in case we need the data later
-            # u_data = (
-            #     np.frombuffer(in_f.read(((width // 2) * (height // 2))), dtype=np.uint8)
-            #     .reshape((height // 2, width // 2))
-            #     .astype("float32")
-            # )
-            # v_data = (
-            #     np.frombuffer(in_f.read(((width // 2) * (height // 2))), dtype=np.uint8)
-            #     .reshape((height // 2, width // 2))
-            #     .astype("float32")
-            # )
-            if not full_range:
-                # convert to grey by assumng limited range input
-                y_data = np.around((y_data - 16)/((235-16)/255))
-            yield y_data
-
-
-def read_file(input_file: str):
-    """
-    Read a regular file and yield the per-frame grey data via PyAV
-    """
-    container = av.open(input_file)
-
-    if not len(container.streams.video):
-        raise RuntimeError("No video streams found!")
-
-    for frame in container.decode(video=0):
-        frame_data = (
-            frame.to_ndarray(format="gray")
-            .reshape(frame.height, frame.width)
-            .astype("float32")
-        )
-        yield frame_data
 
 
 def get_num_frames(input_file: str, width=None, height=None):
@@ -159,11 +73,16 @@ def calculate_si_ti(
             "Warning: Reading YUV files may produce values different from what you would get if you analyzed a muxed (e.g. MP4) file.. See https://github.com/slhck/siti/issues/4 for more info.",
             file=sys.stderr,
         )
-        kwargs = {"width": width, "height": height, "full_range": full_range}
+        kwargs = {
+            "width": width,
+            "height": height,
+            "full_range": full_range,
+            "file_format": FileFormat.YUV420P,
+        }
         iterator_fun = read_yuv
     else:
         kwargs = {}
-        iterator_fun = read_file
+        iterator_fun = read_container
 
     # if the user didn't specify a maximum, get it from the container
     if num_frames == 0:
@@ -173,12 +92,12 @@ def calculate_si_ti(
 
     current_frame = 0
     for frame_data in iterator_fun(input_file, **kwargs):
-        si = calculate_si(frame_data)
-        si_values.append(si)
+        si_value = si(frame_data)
+        si_values.append(si_value)
 
-        ti = calculate_ti(frame_data, previous_frame_data)
-        if ti is not None:
-            ti_values.append(ti)
+        ti_value = ti(frame_data, previous_frame_data)
+        if ti_value is not None:
+            ti_values.append(ti_value)
 
         previous_frame_data = frame_data
 
@@ -208,7 +127,10 @@ def main():
         "-q", "--quiet", help="do not show progress bar", action="store_true"
     )
     parser.add_argument(
-        "-n", "--num-frames", help="number of frames to calculate, must be >= 2", type=int
+        "-n",
+        "--num-frames",
+        help="number of frames to calculate, must be >= 2",
+        type=int,
     )
     parser.add_argument("--width", help="frame width (for YUV files)", type=int)
     parser.add_argument("--height", help="frame height (for YUV files)", type=int)
@@ -237,22 +159,22 @@ def main():
         full_range=cli_args.full_range,
     )
 
-    si = np.round(np.array(si_orig).astype(float), 3).tolist()
-    ti = np.round(np.array(ti_orig).astype(float), 3).tolist()
+    si_list = np.round(np.array(si_orig).astype(float), 3).tolist()
+    ti_list = np.round(np.array(ti_orig).astype(float), 3).tolist()
 
     if cli_args.output_format == "json":
         data = {
             "input_file": os.path.abspath(cli_args.input),
-            "si": si,
-            "ti": ti,
-            "avg_si": round(np.mean(si), 3),
-            "avg_ti": round(np.mean(ti), 3),
-            "max_si": round(np.max(si), 3),
-            "min_si": round(np.min(si), 3),
-            "max_ti": round(np.max(ti), 3),
-            "min_ti": round(np.min(ti), 3),
-            "std_si": round(np.std(si), 3),
-            "std_ti": round(np.std(ti), 3),
+            "si": si_list,
+            "ti": ti_list,
+            "avg_si": round(np.mean(si_list), 3),
+            "avg_ti": round(np.mean(ti_list), 3),
+            "max_si": round(np.max(si_list), 3),
+            "min_si": round(np.min(si_list), 3),
+            "max_ti": round(np.max(ti_list), 3),
+            "min_ti": round(np.min(ti_list), 3),
+            "std_si": round(np.std(si_list), 3),
+            "std_ti": round(np.std(ti_list), 3),
             "num_frames": num_frames,
         }
         data_dump = json.dumps(data, indent=True, sort_keys=True)
@@ -266,8 +188,8 @@ def main():
 
         data = {
             "input_file": [os.path.abspath(cli_args.input)] * num_frames,
-            "si": si,
-            "ti": ti,
+            "si": si_list,
+            "ti": ti_list,
             "n": range(1, num_frames + 1),
         }
 
