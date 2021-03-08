@@ -6,13 +6,14 @@ A command-line-based tool to calculate spatial information (SI) and temporal inf
 
 The command outputs SI and TI information to stdout, in JSON format, or alternatively as CSV.
 
+This program internally uses the [`siti-tools` library](https://github.com/Telecommunication-Telemedia-Assessment/siti-tools).
+
 Author: Werner Robitza
 
 **Important Note / Breaking Changes:**
 
 * Version 1.3 fixes an issue with border handling, now returning values that should better match ITU-T Rec. P.910. Thanks to Cosmin Stejerean for raising these issues.
 * Version 1.x now outputs the same number of values for SI and TI, inserting a null value for the first frame's TI. Also, the output format has been changed.
-* Version 0.x produces incorrect values due to wrong reading of the data using PyAV. Version 1.x and above produces correct values in the sense of corresponding to [this implementation](https://github.com/Telecommunication-Telemedia-Assessment/SITI/). As there are no test vectors for SI / TI implementations, and filter calculations differ depending on how you implement them, the values obtained with this tool may not be comparable with output from other tools.
 
 Contents:
 
@@ -24,7 +25,7 @@ Contents:
 
 ## Requirements
 
-- Python 3
+- Python 3.7 or higher
 - FFmpeg libraries (to run `pyav`)
 
 Under Ubuntu, to get ffmpeg libraries:
