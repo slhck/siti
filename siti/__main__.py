@@ -168,13 +168,13 @@ def main():
             "si": si_list,
             "ti": ti_list,
             "avg_si": round(np.mean(si_list), 3),
-            "avg_ti": round(np.mean(ti_list), 3),
+            "avg_ti": round(np.mean(ti_list[1:]), 3),
             "max_si": round(np.max(si_list), 3),
             "min_si": round(np.min(si_list), 3),
-            "max_ti": round(np.max(ti_list), 3),
-            "min_ti": round(np.min(ti_list), 3),
+            "max_ti": round(np.max(ti_list[1:]), 3),
+            "min_ti": round(np.min(ti_list[1:]), 3),
             "std_si": round(np.std(si_list), 3),
-            "std_ti": round(np.std(ti_list), 3),
+            "std_ti": round(np.std(ti_list[1:]), 3),
             "num_frames": num_frames,
         }
         data_dump = json.dumps(data, indent=True, sort_keys=True)

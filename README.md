@@ -12,6 +12,7 @@ Author: Werner Robitza
 
 **Important Note / Breaking Changes:**
 
+* Version 1.4 does not include the 0 TI value for global statistics calculation
 * Version 1.3 fixes an issue with border handling, now returning values that should better match ITU-T Rec. P.910. Thanks to Cosmin Stejerean for raising these issues.
 * Version 1.x now outputs the same number of values for SI and TI, inserting a null value for the first frame's TI. Also, the output format has been changed.
 
