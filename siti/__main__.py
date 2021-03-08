@@ -70,7 +70,9 @@ def calculate_si_ti(
 
     if input_file.endswith(".yuv"):
         print(
-            "Warning: Reading YUV files may produce values different from what you would get if you analyzed a muxed (e.g. MP4) file.. See https://github.com/slhck/siti/issues/4 for more info.",
+            "Warning: Reading YUV files may produce values different from what "
+            "you would get if you analyzed a muxed (e.g. MP4) file.. "
+            "See https://github.com/slhck/siti/issues/4 for more info.",
             file=sys.stderr,
         )
         kwargs = {
