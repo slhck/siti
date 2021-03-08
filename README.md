@@ -2,6 +2,8 @@
 
 [![PyPI version](https://img.shields.io/pypi/v/siti.svg)](https://img.shields.io/pypi/v/siti)
 
+[![Python package](https://github.com/slhck/siti/actions/workflows/python-package.yml/badge.svg)](https://github.com/slhck/siti/actions/workflows/python-package.yml)
+
 A command-line-based tool to calculate spatial information (SI) and temporal information (TI) according to ITU-T P.910.
 
 The command outputs SI and TI information to stdout, in JSON format, or alternatively as CSV.
