@@ -34,8 +34,6 @@ setup(
     install_requires=["scipy", "numpy", "av", "tqdm"],
     license="MIT",
     zip_safe=False,
-    setup_requires=["pytest-runner"],
-    tests_require=["pytest"],
     keywords="video, spatial information, temporal information",
     classifiers=[
         "Development Status :: 4 - Beta",
@@ -48,5 +46,6 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
     ],
+    python_requires=">=3.7",
     entry_points={"console_scripts": ["siti = siti.__main__:main"]},
 )
