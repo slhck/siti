@@ -1,6 +1,15 @@
 # Changelog
 
 
+## v1.4.1 (2021-03-10)
+
+* Add python_requires to setup.py, remove pytest.
+
+* Add status badge.
+
+* Add GitHub actions tests (#8)
+
+
 ## v1.4.0 (2021-03-08)
 
 * Exclude first 0 TI value from global stats.
