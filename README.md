@@ -1,6 +1,6 @@
 # SITI: Spatial Information / Temporal Information
 
-[![PyPI version](https://img.shields.io/pypi/v/siti.svg)](https://img.shields.io/pypi/v/siti)
+[![PyPI version](https://img.shields.io/pypi/v/siti.svg)](https://pypi.org/project/siti/)
 
 [![Python package](https://github.com/slhck/siti/actions/workflows/python-package.yml/badge.svg)](https://github.com/slhck/siti/actions/workflows/python-package.yml)
 
