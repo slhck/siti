@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v1.4.2 (2021-12-13)
+
+* Include siti_tools in setup.py.
+
+* Pypi badge links to pypi (#9)
+
+
 ## v1.4.1 (2021-03-10)
 
 * Add python_requires to setup.py, remove pytest.
