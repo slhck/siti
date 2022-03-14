@@ -24,6 +24,8 @@ Contents:
 - [Installation](#installation)
 - [Usage](#usage)
 - [Background](#background)
+  - [Spatial Information](#spatial-information)
+  - [Temporal information](#temporal-information)
 - [License](#license)
 
 ## Requirements

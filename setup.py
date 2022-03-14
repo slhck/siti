@@ -31,7 +31,7 @@ setup(
     url="https://github.com/slhck/siti",
     packages=["siti"],
     include_package_data=True,
-    install_requires=["scipy", "numpy", "av", "tqdm", "siti_tools>=0.1.0,<1.0"],
+    install_requires=["scipy", "numpy", "av", "tqdm", "siti_tools>=0.1.3,<1.0"],
     license="MIT",
     zip_safe=False,
     keywords="video, spatial information, temporal information",

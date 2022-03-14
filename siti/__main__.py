@@ -83,7 +83,9 @@ def calculate_si_ti(
         }
         iterator_fun = read_yuv
     else:
-        kwargs = {}
+        kwargs = {
+            "full_range": full_range,
+        }
         iterator_fun = read_container
 
     # if the user didn't specify a maximum, get it from the container
@@ -94,6 +96,7 @@ def calculate_si_ti(
 
     current_frame = 0
     for frame_data in iterator_fun(input_file, **kwargs):
+        # print(f"  [{np.around(np.min(frame_data), 3)}, {np.around(np.max(frame_data), 3)}], mean {np.around(np.mean(frame_data), 3)}, median {np.around(np.median(frame_data), 3)}")
         si_value = si(frame_data)
         si_values.append(si_value)
 
