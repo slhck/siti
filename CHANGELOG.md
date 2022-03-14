@@ -1,6 +1,11 @@
 # Changelog
 
 
+## v1.4.3 (2022-03-14)
+
+* Handle full range for container reading.
+
+
 ## v1.4.2 (2021-12-13)
 
 * Include siti_tools in setup.py.
@@ -110,11 +115,6 @@
 * Update README.
 
   fix info about output format
-
-
-## v1.0.3 (2019-06-16)
-
-* Update release script.
 
 
 ## v1.0.2 (2019-05-18)
