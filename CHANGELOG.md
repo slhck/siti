@@ -1,6 +1,11 @@
 # Changelog
 
 
+## v1.4.4 (2022-05-03)
+
+* More strict requirements check.
+
+
 ## v1.4.3 (2022-03-14)
 
 * Handle full range for container reading.
