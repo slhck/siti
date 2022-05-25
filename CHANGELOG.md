@@ -1,6 +1,11 @@
 # Changelog
 
 
+## v1.4.5 (2022-05-25)
+
+* Remove dependency on siti_tools.
+
+
 ## v1.4.4 (2022-05-03)
 
 * More strict requirements check.
@@ -120,6 +125,11 @@
 * Update README.
 
   fix info about output format
+
+
+## v1.0.3 (2019-06-16)
+
+* Update release script.
 
 
 ## v1.0.2 (2019-05-18)
