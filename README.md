@@ -8,8 +8,6 @@ A command-line-based tool to calculate spatial information (SI) and temporal inf
 
 The command outputs SI and TI information to stdout, in JSON format, or alternatively as CSV.
 
-This program internally uses the [`siti-tools` library](https://github.com/Telecommunication-Telemedia-Assessment/siti-tools).
-
 Author: Werner Robitza
 
 **Important Note / Breaking Changes:**

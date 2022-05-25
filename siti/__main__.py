@@ -13,16 +13,167 @@
 # Outputs SI/TI statistics as JSON to stderr or to a file.
 
 import argparse
+from enum import Enum
+from typing import Generator, Optional
 import av
 import json
 import numpy as np
 import os
 import sys
 from tqdm import tqdm
-from siti_tools.file import read_container, read_yuv, FileFormat
-from siti_tools.siti import si, ti
+from scipy import ndimage
 
 from .__init__ import __version__ as version
+
+
+def si(frame_data: np.ndarray) -> float:
+    """Calculate SI of a frame
+
+    Args:
+        frame_data (ndarray): 2D array of input frame data
+
+    Returns:
+        float: SI
+    """
+    # TODO: check array dimensions
+
+    # calculate horizontal/vertical operators
+    sob_x = ndimage.sobel(frame_data, axis=0)
+    sob_y = ndimage.sobel(frame_data, axis=1)
+
+    # crop output to valid window, calculate gradient magnitude
+    si = np.hypot(sob_x, sob_y)[1:-1, 1:-1].std()
+    return si
+
+
+def ti(
+    frame_data: np.ndarray, previous_frame_data: Optional[np.ndarray]
+) -> Optional[float]:
+    """
+    Calculate TI between two frames.
+
+    Args:
+        frame_data (ndarray): 2D array of current frame data
+        previous_frame_data (ndarray): 2D array of previous frame data, must be of same size as current frame
+
+    Returns:
+        float: TI, or None if previous frame data is not given
+    """
+    # TODO: check array dimensions
+    # TODO: check array dimensions equal between both args
+
+    if previous_frame_data is None:
+        return None
+    else:
+        return (frame_data - previous_frame_data).std()
+
+
+class FileFormat(Enum):
+    YUV420P = 1
+
+
+def _convert_range(y_data: np.ndarray) -> np.ndarray:
+    # check if we don't actually exceed minimum range
+    if np.min(y_data) < 16 or np.max(y_data) > 235:
+        raise RuntimeError(
+            "Input YUV appears to be full range, specify full_range=True!"
+        )
+    # convert to grey by assumng limited range input
+    y_data = np.around((y_data - 16) / ((235 - 16) / 255))
+    return y_data
+
+
+def read_yuv(
+    input_file: str,
+    width: int,
+    height: int,
+    file_format=FileFormat.YUV420P,
+    full_range=False,
+) -> Generator[np.ndarray, None, None]:
+    """Read a YUV420p file and yield the per-frame Y data
+
+    Args:
+        input_file (str): Input file path
+        width (int): Width in pixels
+        height (int): Height in pixels
+        file_format (str, optional): The input file format. Defaults to FileFormat.YUV420P.
+        full_range (bool, optional): Whether to assume full range input. Defaults to False.
+
+    Raises:
+        NotImplementedError: If a wrong file format is chosen
+
+    Yields:
+        np.ndarray: The frame data, integer
+    """
+    # TODO: add support for other YUV types
+    if file_format != FileFormat.YUV420P:
+        raise NotImplementedError("Other file formats are not yet implemented!")
+
+    # get the number of frames
+    file_size = os.path.getsize(input_file)
+
+    num_frames = file_size // (width * height * 3 // 2)
+
+    with open(input_file, "rb") as in_f:
+        for _ in range(num_frames):
+            y_data = (
+                np.frombuffer(in_f.read((width * height)), dtype=np.uint8)
+                .reshape((height, width))
+                .astype("int")
+            )
+
+            # read U and V components, but skip
+            in_f.read((width // 2) * (height // 2) * 2)
+
+            # in case we need the data later, you can uncomment this:
+            # u_data = (
+            #     np.frombuffer(in_f.read(((width // 2) * (height // 2))), dtype=np.uint8)
+            #     .reshape((height // 2, width // 2))
+            #     .astype("int")
+            # )
+            # v_data = (
+            #     np.frombuffer(in_f.read(((width // 2) * (height // 2))), dtype=np.uint8)
+            #     .reshape((height // 2, width // 2))
+            #     .astype("int")
+            # )
+
+            if not full_range:
+                # check if we don't actually exceed minimum range
+                y_data = _convert_range(y_data)
+
+            yield y_data
+
+
+def read_container(
+    input_file: str, full_range=False
+) -> Generator[np.ndarray, None, None]:
+    """Read a multiplexed file via ffmpeg and yield the per-frame Y data
+
+    Args:
+        input_file (str): Input file path
+
+    Raises:
+        RuntimeError: If no video streams were found
+
+    Yields:
+        np.ndarray: The frame data, integer
+    """
+    container = av.open(input_file)
+
+    if not len(container.streams.video):
+        raise RuntimeError("No video streams found!")
+
+    for frame in container.decode(video=0):
+        frame_data = (
+            frame.to_ndarray(format="gray")
+            .reshape(frame.height, frame.width)
+            .astype("int")
+        )
+
+        if not full_range:
+            # check if we don't actually exceed minimum range
+            frame_data = _convert_range(frame_data)
+        yield frame_data
 
 
 def get_num_frames(input_file: str, width=None, height=None):
@@ -117,7 +268,7 @@ def calculate_si_ti(
 
 def main():
     parser = argparse.ArgumentParser(
-        prog="siti", description="siti v{}".format(version)
+        prog="siti", description="siti v{}".format(version), formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
     parser.add_argument("input", help="input file", type=str)
     parser.add_argument(
