@@ -108,7 +108,7 @@ The measure of temporal information (TI) is computed as the maximum over time (m
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/PolynomialDivision"><img src="https://avatars.githubusercontent.com/u/10708466?v=4?s=100" width="100px;" alt="Nick Hainke"/><br /><sub><b>Nick Hainke</b></sub></a><br /><a href="https://github.com/slhck/siti/commits?author=PolynomialDivision" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/PolynomialDivision"><img src="https://avatars.githubusercontent.com/u/10708466?v=4?s=100" width="100px;" alt="Nick Hainke"/><br /><sub><b>Nick Hainke</b></sub></a><br /><a href="https://github.com/slhck/siti/commits?author=PolynomialDivision" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://hofbi.github.io/"><img src="https://avatars.githubusercontent.com/u/10724293?v=4?s=100" width="100px;" alt="Markus Hofbauer"/><br /><sub><b>Markus Hofbauer</b></sub></a><br /><a href="https://github.com/slhck/siti/commits?author=hofbi" title="Documentation">📖</a></td>
     </tr>
   </tbody>
