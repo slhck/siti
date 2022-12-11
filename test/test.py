@@ -32,25 +32,25 @@ def read_gt(what="si"):
 
 @pytest.fixture
 def si():
-    si, _, _ = siti.calculate_si_ti(input_file, quiet=True)
+    si, _, _ = siti.calculate_si_ti(input_file, full_range=True, quiet=True)
     return si
 
 
 @pytest.fixture
 def ti():
-    _, ti, _ = siti.calculate_si_ti(input_file, quiet=True)
+    _, ti, _ = siti.calculate_si_ti(input_file, full_range=True, quiet=True)
     return ti
 
 
 @pytest.fixture
 def si_yuv(yuv_file):
-    si, _, _ = siti.calculate_si_ti(yuv_file, width=320, height=240, quiet=True)
+    si, _, _ = siti.calculate_si_ti(yuv_file, full_range=True, width=320, height=240, quiet=True)
     return si
 
 
 @pytest.fixture
 def ti_yuv(yuv_file):
-    _, ti, _ = siti.calculate_si_ti(yuv_file, width=320, height=240, quiet=True)
+    _, ti, _ = siti.calculate_si_ti(yuv_file, full_range=True, width=320, height=240, quiet=True)
     return ti
 
 
@@ -100,14 +100,3 @@ def test_avg_si_yuv(si_yuv, si_gt):
 
 def test_avg_ti_yuv(ti_yuv, ti_gt):
     assert abs(np.mean(ti_yuv) - np.mean(ti_gt)) < 0.05
-
-
-# def main():
-#     si, ti, num_frames = siti.calculate_si_ti(input_file, quiet=True)
-#     si_gt = read_gt("si")
-#     ti_gt = read_gt("ti")
-#     print([round(x, 2) for x in si])
-#     print([round(x, 2) for x in si_gt])
-#     print([round(x, 2) for x in ti])
-#     print([round(x, 2) for x in ti_gt])
-#     print(num_frames)
