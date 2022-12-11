@@ -1,4 +1,7 @@
 # SITI: Spatial Information / Temporal Information
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![PyPI version](https://img.shields.io/pypi/v/siti.svg)](https://pypi.org/project/siti/)
 
@@ -24,6 +27,7 @@ Contents:
 - [Background](#background)
   - [Spatial Information](#spatial-information)
   - [Temporal information](#temporal-information)
+- [Contributors](#contributors)
 - [License](#license)
 
 ## Requirements
@@ -96,9 +100,27 @@ The measure of temporal information (TI) is computed as the maximum over time (m
 
 > More motion in adjacent frames will result in higher values of TI
 
+## Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/PolynomialDivision"><img src="https://avatars.githubusercontent.com/u/10708466?v=4?s=100" width="100px;" alt="Nick Hainke"/><br /><sub><b>Nick Hainke</b></sub></a><br /><a href="https://github.com/slhck/siti/commits?author=PolynomialDivision" title="Code">💻</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
 ## License
 
-siti, Copyright (c) 2017-2019 Werner Robitza
+siti, Copyright (c) 2017-2022 Werner Robitza
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

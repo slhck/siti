@@ -1,0 +1,25 @@
+{
+  "projectName": "siti",
+  "projectOwner": "slhck",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "PolynomialDivision",
+      "name": "Nick Hainke",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10708466?v=4",
+      "profile": "https://github.com/PolynomialDivision",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "linkToUsage": false
+}
