@@ -18,6 +18,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "hofbi",
+      "name": "Markus Hofbauer",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10724293?v=4",
+      "profile": "https://hofbi.github.io/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
